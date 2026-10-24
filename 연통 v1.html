@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부대행정업무 - 용사신상관리</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --army-header-bg: #386927;
+            --army-menu-bg: #4a5c43;
+            --main-border-color: #b2bdc7;
+            --table-header-bg: #e2e8ee;
+            --table-header-text: #222222;
+            --accent-teal: #1b5262;
+            --accent-teal-hover: #133c48;
+            --section-title-color: #0d3846;
+            --light-bg: #f8fafc;
+            --sub-bg: #edf2f7;
+            --border-light: #cbd5e1;
+            --danger-red: #d9534f;
+            --warning-orange: #f0ad4e;
+            --info-blue: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+            font-size: 11px;
+            color: #333333;
+        }
+
+        body {
+            background-color: #eef2f5;
+            overflow-x: auto;
+            min-width: 1280px;
+        }
+
+        /* 상단 시스템 헤더 */
+        .top-system-header {
+            background-color: var(--army-header-bg);
+            color: #ffffff;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .top-system-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .top-system-header .user-info-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            color: #e2e8f0;
+        }
+
+        .user-info-bar span strong {
+            color: #ffeb3b;
+        }
+
+        /* 메인 메뉴 네비게이션 */
+        .main-nav-bar {
+            background-color: #f1f5f9;
+            border-bottom: 2px solid #cbd5e1;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        .nav-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-title-group h1 {
+            font-size: 15px;
+            color: var(--section-title-color);
+            font-weight: bold;
+        }
+
+        .nav-menu-list {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .nav-menu-list li a {
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+            padding: 4px 8px;
+        }
+
+        .nav-menu-list li.active a {
+            color: var(--accent-teal);
+            border-bottom: 2px solid var(--accent-teal);
+        }
+
+        /* 앱 레이아웃 구조 */
+        .app-container {
+            display: flex;
+            width: 100%;
+            min-height: calc(100vh - 86px);
+            padding: 8px;
+            gap: 8px;
+        }
+
+        .sidebar {
+            width: 200px;
+            background: #ffffff;
+            border: 1px solid var(--main-border-color);
+            padding: 8px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            background: #f1f5f9;
+            padding: 6px 8px;
+            font-weight: bold;
+            font-size: 12px;
+            border-bottom: 1px solid #cbd5e1;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .tree-menu {
+            list-style: none;
+            padding-left: 4px;
+        }
+
+        .tree-menu li {
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        .tree-menu .tree-node {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .tree-menu .tree-sub {
+            padding-left: 14px;
+            list-style: none;
+        }
+
+        .tree-menu .tree-sub li {
+            font-weight: normal;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        .tree-menu .tree-sub li.active {
+            color: #0284c7;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            background: #ffffff;
+            border: 1px solid var(--main-border-color);
+            padding: 10px 14px;
+            overflow-y: auto;
+        }
+
+        .breadcrumb {
+            text-align: right;
+            font-size: 10px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        /* 섹션 타이틀 헤더 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+        }
+
+        .section-header h2 {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--section-title-color);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .section-header h2::before {
+            content: "■";
+            font-size: 8px;
+            color: var(--accent-teal);
+        }
+
+        .section-header.dash-header h2::before {
+            content: "-";
+            font-size: 12px;
+            color: #333333;
+            margin-right: 2px;
+        }
+
+        /* 부대행정 표준 테이블 */
+        .army-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--main-border-color);
+            margin-bottom: 6px;
+            background: #ffffff;
+        }
+
+        .army-table th, .army-table td {
+            border: 1px solid var(--main-border-color);
+            padding: 4px 6px;
+            text-align: center;
+            vertical-align: middle;
+            height: 24px;
+        }
+
+        .army-table th {
+            background-color: var(--table-header-bg);
+            font-weight: bold;
+            color: var(--table-header-text);
+            white-space: nowrap;
+        }
+
+        .army-table td.left {
+            text-align: left;
+        }
+
+        /* 버튼 및 페이징 */
+        .btn-group {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            background-color: var(--accent-teal);
+            color: #ffffff;
+            border: 1px solid #133c48;
+            padding: 3px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-teal-hover);
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            border-color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+        .clickable-row:hover {
+            background-color: #f1f5f9;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            margin: 8px 0;
+        }
+
+        .pagination-btn {
+            border: 1px solid #b2bdc7;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 2px 7px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .pagination-btn.active {
+            background-color: var(--accent-teal);
+            color: #ffffff;
+            font-weight: bold;
+            border-color: #133c48;
+        }
+
+        .pagination-btn:hover:not(.active) {
+            background-color: #e2e8ee;
+        }
+
+        /* 탭 구조 */
+        .tab-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid var(--accent-teal);
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        .tab-group {
+            display: flex;
+            gap: 2px;
+        }
+
+        .tab-item {
+            padding: 5px 14px;
+            background: #e2e8f0;
+            border: 1px solid var(--main-border-color);
+            border-bottom: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .tab-item.active {
+            background: var(--accent-teal);
+            color: #ffffff;
+            border-color: var(--accent-teal);
+        }
+
+        /* AI 분석 컨테이너 */
+        .ai-analysis-container {
+            background: #f0f4f8;
+            border: 1px solid #0e7490;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0 14px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .ai-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .ai-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 3px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-card-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-select, .ai-input, .ai-textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            padding: 4px;
+            border-radius: 2px;
+            font-size: 11px;
+            background: #f8fafc;
+        }
+
+        .ai-textarea {
+            height: 75px;
+            resize: none;
+            line-height: 1.4;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 175px;
+            width: 100%;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .report-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 3px;
+        }
+
+        .report-box-header {
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 4px;
+        }
+
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+            padding: 4px 6px;
+            background: #f8fafc;
+            border-radius: 2px;
+            border-left: 3px solid #64748b;
+        }
+
+        .risk-item.high { border-left-color: var(--danger-red); }
+        .risk-item.medium { border-left-color: var(--warning-orange); }
+
+        .badge {
+            padding: 2px 6px;
+            border-radius: 2px;
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .badge-danger { background-color: var(--danger-red); }
+        .badge-warning { background-color: var(--warning-orange); }
+        .badge-info { background-color: var(--info-blue); }
+
+        .guide-list, .action-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .guide-list li, .action-list li {
+            margin-bottom: 5px;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .action-list li::before {
+            content: "✔";
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .footer-banner {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #64748b;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+        }
+
+        /* 육군 인트라넷 전용 알림 모달 */
+        .army-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .army-modal-box {
+            background: #ffffff;
+            border: 2px solid var(--accent-teal);
+            width: 320px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-radius: 3px;
+        }
+
+        .army-modal-header {
+            background: var(--accent-teal);
+            color: #ffffff;
+            font-weight: bold;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .army-modal-body {
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 11px;
+            color: #333333;
+            line-height: 1.5;
+        }
+
+        .army-modal-footer {
+            padding: 6px 10px;
+            background: #f8fafc;
+            border-top: 1px solid var(--main-border-color);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 헤더 영역 -->
+    <header class="top-system-header">
+        <div class="brand">
+            <span>대한민국 육군 ROK ARMY | 부대행정업무</span>
+        </div>
+        <div class="user-info-bar">
+            <span>2차 인증 유효 시간 <strong id="timer">29:30</strong></span> |
+            <span>홈</span> |
+            <span>군번: 26-10220</span> |
+            <span>관리부대: 제xx통신지원대대</span> |
+            <span>소속: 지휘부</span> |
+            <span>성명: 시그널</span> |
+            <span>도움말</span> |
+            <span>관리부대변경</span>
+        </div>
+    </header>
+
+    <!-- 메인 네비게이션 -->
+    <nav class="main-nav-bar">
+        <div class="nav-title-group">
+            <h1>인사</h1>
+            <ul class="nav-menu-list">
+                <li class="active"><a href="#">인사</a></li>
+                <li><a href="#">정작</a></li>
+                <li><a href="#">부대운영일지</a></li>
+                <li><a href="#">시스템</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- 좌측 사이드바 -->
+        <aside class="sidebar">
+            <div class="sidebar-title">■ 인사관리 Menu</div>
+            <ul class="tree-menu">
+                <li>
+                    <div class="tree-node">▶ 인원현황</div>
+                    <ul class="tree-sub">
+                        <li>- 인원현황</li>
+                        <li>- 유동병력관리</li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="tree-node">▶ 간부관리</div>
+                    <ul class="tree-sub">
+                        <li>- 간부신상관리</li>
+                        <li>- 간부전역자관리</li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="tree-node">▼ 용사관리</div>
+                    <ul class="tree-sub">
+                        <li class="active">- 용사신상관리</li>
+                        <li>- 용사전역자관리</li>
+                        <li>- 도움병사관리</li>
+                        <li>- 용사진급관리</li>
+                        <li>- 징계현황관리</li>
+                        <li>- 상훈관리</li>
+                        <li>- 간부지원자관리</li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <main class="main-content">
+            <div class="breadcrumb">홈 > 인사 > 병사관리 > <strong>용사신상관리</strong></div>
+
+            <div class="section-header">
+                <h2>용사 신상정보</h2>
+                <div class="checkbox-group">
+                    <label class="checkbox-label"><input type="radio" name="service_type" checked> 현역</label>
+                    <label class="checkbox-label"><input type="radio" name="service_type"> 상근</label>
+                    <label class="checkbox-label"><input type="checkbox"> 최전방 수호병</label>
+                    <label class="checkbox-label"><input type="checkbox"> 동반입대</label>
+                    <label class="checkbox-label"><input type="checkbox"> 쌍둥이</label>
+                </div>
+            </div>
+
+            <!-- 용사 인적사항 테이블 -->
+            <table class="army-table">
+                <colgroup>
+                    <col width="110">
+                    <col width="110">
+                    <col width="220">
+                    <col width="110">
+                    <col width="180">
+                    <col width="110">
+                    <col width="180">
+                </colgroup>
+                <tr>
+                    <td rowspan="8" style="padding: 4px;">
+                        <img src="https://placehold.co/95x120/1b5262/ffffff?text=ROK+ARMY" alt="증명사진" style="width: 95px; height: 120px; border: 1px solid #ccc; object-fit: cover;">
+                    </td>
+                    <th>전체소속</th>
+                    <td colspan="5" class="left" style="font-weight: bold;">육군 제2작전사 제12정보통신단 제72통신지원대대 지원3중대 전송1소대 단말3조</td>
+                </tr>
+                <tr>
+                    <th>군번</th>
+                    <td>25-76026709</td>
+                    <th>소속</th>
+                    <td>단말3조</td>
+                    <th>군사특기</th>
+                    <td>(171,102)</td>
+                </tr>
+                <tr>
+                    <th>직책</th>
+                    <td>통신병</td>
+                    <th>계급</th>
+                    <td>병장</td>
+                    <th>성명</th>
+                    <td>백희민</td>
+                </tr>
+                <tr>
+                    <th>입대일</th>
+                    <td>2025-04-28</td>
+                    <th>전입일</th>
+                    <td>2025-06-05</td>
+                    <th>진급일</th>
+                    <td>2026-06-01</td>
+                </tr>
+                <tr>
+                    <th>생년월일</th>
+                    <td>2006-07-28</td>
+                    <th>전역예정일</th>
+                    <td>2026-10-27</td>
+                    <th>진급</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>DNA 시료채취<br>(채취완료부대)</th>
+                    <td>시료채취</td>
+                    <th>신병교육대(입영부대)</th>
+                    <td>육군훈련소 28교육연대 1교육대 1중대 1소대 055번</td>
+                    <th>전수조사<br>(자대 전입시)</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>복무상태</th>
+                    <td>현인원</td>
+                    <th>비고</th>
+                    <td colspan="3" class="left">2생활관 / 멘토: 대위 강원진 / 이병 지성소</td>
+                </tr>
+                <tr>
+                    <th>휴대폰번호</th>
+                    <td>010-6499-5892</td>
+                    <th>간부지원의사</th>
+                    <td colspan="3" class="left">
+                        <label><input type="checkbox"> 3사관학교</label>
+                        <label><input type="checkbox"> 간부사관</label>
+                        <label><input type="checkbox"> 현역부사관</label>
+                        <label><input type="checkbox"> 특정부사관</label>
+                        <label><input type="checkbox"> 임기제부사관</label>
+                        <label><input type="checkbox"> 기타</label>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-group" style="margin-bottom: 10px;">
+                <button class="btn" onclick="showMsg('신상정보 수정 화면으로 이동합니다.')">신상정보수정</button>
+                <button class="btn btn-secondary">목록</button>
+                <button class="btn">도움병사목록</button>
+            </div>
+
+            <div class="tab-container">
+                <div class="tab-group">
+                    <div class="tab-item active">일반정보</div>
+                    <div class="tab-item">신체/건강</div>
+                    <div class="tab-item">전체보기</div>
+                </div>
+                <div class="tab-group">
+                    <button class="btn btn-secondary">전투력수준</button>
+                    <button class="btn btn-secondary">지휘참고</button>
+                    <button class="btn btn-secondary">진급심의표</button>
+                </div>
+            </div>
+
+            <!-- 도움병사 정보 -->
+            <div class="section-header">
+                <h2>도움병사</h2>
+            </div>
+            <table class="army-table">
+                <tr>
+                    <th>관리등급</th>
+                    <td>-</td>
+                    <th>등급제외</th>
+                    <td>-</td>
+                    <th>예전도움병사여부</th>
+                    <td>N</td>
+                    <th>선정사유1</th>
+                    <td>-</td>
+                    <th>선정사유2</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>등급지정일</th>
+                    <td>2025-06-05</td>
+                    <th>등급해제일</th>
+                    <td>-</td>
+                    <td colspan="2"></td>
+                    <th>첨부파일</th>
+                    <td colspan="3" class="left"><a href="#" style="color:#0284c7; text-decoration: underline;">1750676711311_등급분류표 이병 이학벌.hwp</a></td>
+                </tr>
+                <tr>
+                    <th>세부사항</th>
+                    <td colspan="9" class="left" style="line-height: 1.6; padding: 6px;">
+                        1. 지휘관 면담 : 월 1회 진행 중(25.06.05.) * 최근 상담결과 : 특이사항 없음.<br>
+                        2. 병영생활상담관 상담 : 총 0회 * 최근 상담결과 : 특이사항 없음.<br>
+                        3. 민간기관 연계 : 해당사항 없음.<br>
+                        4. 정신과 진료 : 총 0회(최근 : 00.00.00.) * 최근 군의관(의사) 소견 : 해당사항 없음.<br>
+                        5. 가족통보 / 관리방법 협조 : 미실시(00.00.00.)<br>
+                        6. 보직 및 부대 조정 : 고려하지 않고 있음.<br>
+                        7. 그린캠프 입소 : 고려하지 않고 있음.<br>
+                        8. 병역심사관리대 입소 : 고려하지 않고 있음.
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn">수정</button>
+                <button class="btn btn-secondary">삭제</button>
+            </div>
+
+            <!-- 가족사항 -->
+            <div class="section-header">
+                <h2>가족사항</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>관계</th>
+                        <th>성명</th>
+                        <th>나이</th>
+                        <th>연락처</th>
+                        <th>전시친권자</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>모</td>
+                        <td>김영선</td>
+                        <td>52</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">가족사항 수정</button>
+            </div>
+
+            <!-- 교우관계 -->
+            <div class="section-header">
+                <h2>교우관계 (선택기재사항)</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>성명</th>
+                        <th>출생년도</th>
+                        <th>연락처</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="color: #94a3b8;">등록된 교우관계 정보가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">추가</button>
+                <button class="btn btn-secondary">삭제</button>
+                <button class="btn">저장</button>
+            </div>
+
+            <!-- 최근 가장 관심/걱정 분야 -->
+            <div class="section-header">
+                <h2>최근 가장 관심 / 걱정이 있는 분야 (선택기재사항) <span style="font-size:10px; font-weight:normal; color:#64748b;">25-12029 / 2025-07-21 07:47:43</span></h2>
+            </div>
+            <table class="army-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col width="150">
+                    <col width="200">
+                </colgroup>
+                <tr>
+                    <th>분야</th>
+                    <th>사유</th>
+                    <th>분야</th>
+                    <th>사유</th>
+                </tr>
+                <tr>
+                    <th>군 생활의 적응</th>
+                    <td>없음</td>
+                    <th>건강문제</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>성격적인 문제</th>
+                    <td>없음</td>
+                    <th>가족관계</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>이성과의 문제</th>
+                    <td>없음</td>
+                    <th>대인관계</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>금전적인 문제</th>
+                    <td>없음</td>
+                    <th>기타</th>
+                    <td>없음</td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn">저장</button>
+            </div>
+
+            <!-- 입대 후 복무기록 -->
+            <div class="section-header">
+                <h2>입대 후 복무기록</h2>
+            </div>
+            <table class="army-table" id="serviceRecordTable">
+                <thead>
+                    <tr>
+                        <th width="40">순번</th>
+                        <th width="90">일자</th>
+                        <th>주요복무내용</th>
+                        <th width="80">첨부파일1</th>
+                        <th width="80">첨부파일2</th>
+                        <th width="80">첨부파일3</th>
+                        <th width="70">기록자</th>
+                        <th width="120">기록일자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2026-10-02</td>
+                        <td class="left">10.2 외진(의출) 외부진료 감소 : 손목통증 이비인</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>지성소</td>
+                        <td>2026-10-02 21:09:50</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2026-08-07</td>
+                        <td class="left">26년 3분기 관계유형검사 결과 "평균형"</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>윤지웅</td>
+                        <td>2026-08-07 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2026-07-30</td>
+                        <td class="left">복무적응도 4차 검사 결과 : 양호(26.07.30)</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>이정태</td>
+                        <td>2026-07-30 16:56:20</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+                <button class="btn btn-secondary">부분출력</button>
+                <button class="btn btn-secondary">전체출력</button>
+                <button class="btn">일괄 업로드</button>
+            </div>
+
+            <!-- 복무적응도 -->
+            <div class="section-header">
+                <h2>복무적응도</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>검사일자</th>
+                        <th>검사결과</th>
+                        <th>후속조치 면담</th>
+                        <th>지휘조치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="padding: 12px; color: #64748b;">데이터가 없음</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+            </div>
+
+            <!-- 관계유형검사 -->
+            <div class="section-header">
+                <h2>관계유형검사</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>검사일자</th>
+                        <th>검사결과</th>
+                        <th>후속조치 면담</th>
+                        <th>지휘조치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="padding: 12px; color: #64748b;">데이터가 없음</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+            </div>
+
+
+            <!-- [요청사항 3] 면담 및 관찰기록 (AI 위험징후 식별 상단으로 이동) -->
+            <div id="counselingListView">
+                <div class="section-header">
+                    <h2>면담 및 관찰기록</h2>
+                    <span style="font-size:10px; color:#ef4444;">* 항목목록의 항목을 클릭하면 상세 관찰기록 화면으로 넘어갑니다.</span>
+                </div>
+                <table class="army-table" id="counselingTable">
+                    <thead>
+                        <tr>
+                            <th width="40">순번</th>
+                            <th width="90">면담일자</th>
+                            <th width="90">면담종류</th>
+                            <th width="60">첨부1</th>
+                            <th width="60">첨부2</th>
+                            <th width="60">첨부3</th>
+                            <th width="50">구분</th>
+                            <th width="60">기록자</th>
+                            <th width="120">기록일시</th>
+                            <th>조치 및 주요 관찰 내용</th>
+                        </tr>
+                    </thead>
+                    <tbody id="counselingTbody">
+                    </tbody>
+                </table>
+
+                <!-- [요청사항 2] 페이징 컨트롤 (3개 단위, [◀] [1] [2] [▶]) -->
+                <div class="pagination" id="paginationControls"></div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="showMsg('면담 및 관찰기록 등록 화면으로 이동합니다.')">등록</button>
+                    <button class="btn btn-secondary">부분출력</button>
+                    <button class="btn btn-secondary">전체출력</button>
+                    <button class="btn">일괄 업로드</button>
+                </div>
+            </div>
+
+            <!-- 면담 및 관찰기록 상세 화면 (요청사항 1: 면담자 '백희민' 고정) -->
+            <div id="counselingDetailView" style="display: none;">
+                <div class="section-header dash-header">
+                    <h2>- 면담 및 관찰기록</h2>
+                    <div class="btn-group">
+                        <button class="btn" onclick="showMsg('등록 화면으로 이동합니다.');">등록</button>
+                    </div>
+                </div>
+                <table class="army-table">
+                    <colgroup>
+                        <col width="100">
+                        <col width="180">
+                        <col width="100">
+                        <col width="180">
+                        <col width="90">
+                        <col width="100">
+                        <col width="90">
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <th>면담자</th>
+                        <td id="dtlInterviewer" style="font-weight:bold;">백희민</td>
+                        <th>면담일자</th>
+                        <td id="dtlDate">2026-09-01</td>
+                        <th>구분</th>
+                        <td colspan="3" class="left" id="dtlCategory">PC</td>
+                    </tr>
+                    <tr>
+                        <th>면담종류</th>
+                        <td colspan="7" class="left" id="dtlType" style="font-weight:bold;">수시면담</td>
+                    </tr>
+                    <tr>
+                        <th style="vertical-align: middle;">내용</th>
+                        <td colspan="7" class="left" id="dtlContent" style="padding: 8px; line-height: 1.6; white-space: pre-line; vertical-align: top; min-height: 180px;"></td>
+                    </tr>
+                    <tr>
+                        <th>기록자</th>
+                        <td id="dtlWriter">장재원</td>
+                        <th>최초기록일시</th>
+                        <td id="dtlFirstTime">2026-09-01</td>
+                        <th>최종수정일시</th>
+                        <td id="dtlLastTime">2026-09-01</td>
+                        <th>조치결과</th>
+                        <td id="dtlAction" class="left"></td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일</th>
+                        <td colspan="7" class="left" id="dtlFile1">-</td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일2</th>
+                        <td colspan="7" class="left" id="dtlFile2">-</td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일3</th>
+                        <td colspan="7" class="left" id="dtlFile3">-</td>
+                    </tr>
+                </table>
+
+                <div class="btn-group" style="margin-top: 6px; margin-bottom: 10px;">
+                    <button class="btn" id="btnModify" style="display:none;" onclick="showMsg('수정 화면으로 이동합니다.');">수정</button>
+                    <button class="btn btn-secondary" id="btnDelete" style="display:none;" onclick="showMsg('삭제 처리 기능입니다.');">삭제</button>
+                    <button class="btn" onclick="hideCounselingDetail()">목록</button>
+                </div>
+            </div>
+
+
+            <!-- [요청사항 3] AI 기반 위험징후 식별 및 후속관리 (면담기록 하단으로 이동) -->
+            <div class="section-header" style="margin-top: 20px;">
+                <h2>AI 기반 위험징후 식별 및 후속관리 <span style="font-size:10px; font-weight:normal; color:#0284c7; margin-left:6px;">[신인성검사 및 면담록 실시간 AI 연계]</span></h2>
+            </div>
+
+            <div class="ai-analysis-container">
+                <div class="ai-grid-layout">
+                    <div class="ai-card">
+                        <div class="ai-card-title">
+                            <span>시점별/회차별 위험도 변화 추이 (시계열)</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="ai-card">
+                        <div class="ai-card-title">
+                            <span>최근 영역별 위험 균형 (Radar)</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card-title" style="margin-bottom:6px;">
+                    <span style="font-size:11px;" id="reportTitle">최근 분석 리포트 : 백희민 상병 수시면담 자연어 분석 결과 (2026.09.01)</span>
+                    <span style="font-size:10px; color:#64748b;" id="reportTime">분석 완료 시각: 2026-09-01 19:30:00</span>
+                </div>
+
+                <div class="report-grid">
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>🔍 식별된 위험징후 및 판단 근거</span>
+                        </div>
+                        <div class="risk-item high">
+                            <div>
+                                <strong>자살/자해 위험</strong><br>
+                                <span style="color:#64748b; font-size:10px;">"죽고싶다. 오늘밤에 사고칠것 같다" 발언 식별</span>
+                            </div>
+                            <span class="badge badge-danger">위험도: 상</span>
+                        </div>
+                        <div class="risk-item high">
+                            <div>
+                                <strong>정신건강 및 감정기복</strong><br>
+                                <span style="color:#64748b; font-size:10px;">꾸중 후 상기됨, 감정기복 격하게 나타남</span>
+                            </div>
+                            <span class="badge badge-danger">위험도: 상</span>
+                        </div>
+                        <div class="risk-item medium">
+                            <div>
+                                <strong>대인관계 및 소원감</strong><br>
+                                <span style="color:#64748b; font-size:10px;">상황병 대비 차별대우 느꼈다는 호소</span>
+                            </div>
+                            <span class="badge badge-warning">위험도: 중</span>
+                        </div>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>💡 지휘관 맞춤형 후속 질문 가이드</span>
+                        </div>
+                        <ol class="guide-list">
+                            <li><strong>1.</strong> "'다 끝내버리고 싶다'는 생각이 들 때 구체적으로 어떤 도움이 절실한가요?"</li>
+                            <li><strong>2.</strong> "운용과와 중대 업무 환경에서 어떤 점이 백희민 상병을 가장 힘들게 했나요?"</li>
+                            <li><strong>3.</strong> "휴가를 다녀온 후 부대 생활에 대해 어떤 방향을 구상 중인가요?"</li>
+                        </ol>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>📌 권장 후속 관리 조치 (ACTION ITEMS)</span>
+                        </div>
+                        <ul class="action-list">
+                            <li>오늘 근무자에게 백희민 상병 감정상태 및 자살징후 세심 관찰 공유</li>
+                            <li>목요일 병영생활전문상담관 면담 연계 및 진행</li>
+                            <li>중대 원복 고려 및 맞춤형 역할/임무 발굴 부여</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 병영생활 평가 -->
+            <div class="section-header" style="margin-top:20px;">
+                <h2>병영생활 평가</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th width="40">순번</th>
+                        <th width="100">평가일자</th>
+                        <th>1차평가자</th>
+                        <th>2차평가자</th>
+                        <th width="150">최종기록일시</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2026-10-07</td>
+                        <td>안동국</td>
+                        <td>지성소</td>
+                        <td>2026-10-07 16:39:13</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2026-02-10</td>
+                        <td>안동국</td>
+                        <td>유재준</td>
+                        <td>2026-02-10 14:44:31</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">1차평가</button>
+            </div>
+
+            <!-- 간부지원 의사 -->
+            <div class="section-header" style="margin-top:20px;">
+                <h2>간부지원 의사</h2>
+            </div>
+            <table class="army-table">
+                <colgroup>
+                    <col width="120">
+                    <col>
+                    <col width="100">
+                    <col width="120">
+                </colgroup>
+                <tr>
+                    <th>분류</th>
+                    <td class="left">
+                        <label><input type="checkbox"> 3사관학교</label>
+                        <label><input type="checkbox"> 간부사관</label>
+                        <label><input type="checkbox"> 현역부사관</label>
+                        <label><input type="checkbox"> 특정부사관</label>
+                        <label><input type="checkbox"> 임기제부사관</label>
+                    </td>
+                    <th>관심도</th>
+                    <td>
+                        <select class="ai-select" style="width: 80px;">
+                            <option>미선택</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>신원조회여부</th>
+                    <td colspan="3" class="left">
+                        <select class="ai-select" style="width: 100px;">
+                            <option>미실시</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>면담자 의견</th>
+                    <td colspan="3" style="padding: 6px;">
+                        <textarea class="ai-textarea" style="height: 60px;" placeholder="간부지원 관련 면담자 종합 의견을 기재하세요."></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn btn-secondary">삭제</button>
+                <button class="btn">저장</button>
+            </div>
+
+            <footer class="footer-banner">
+                <div style="font-weight:bold; color:#d9534f; font-size:12px;">국가방위의중심군 육군</div>
+                <div>부당한 방법으로 전산망에 접속하거나 정보를 삭제/변경/유출하는 자는 관계 법령에 따라 처벌을 받게 됩니다.<br>Copyright©2013 육군본부 All Rights Reserved</div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- 커스텀 알림 모달 -->
+    <div id="armyModal" class="army-modal-overlay" style="display: none;">
+        <div class="army-modal-box">
+            <div class="army-modal-header">부대행정업무 시스템 알림</div>
+            <div class="army-modal-body" id="armyModalMsg">처리되었습니다.</div>
+            <div class="army-modal-footer">
+                <button class="btn" onclick="closeMsg()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 상단 인증 시간 타이머
+        let totalSeconds = 29 * 60 + 30;
+        setInterval(() => {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                const s = String(totalSeconds % 60).padStart(2, '0');
+                document.getElementById('timer').textContent = `${m}:${s}`;
+            }
+        }, 1000);
+
+        // 커스텀 모달 알림 함수 (alert 대용)
+        function showMsg(msg) {
+            document.getElementById('armyModalMsg').textContent = msg;
+            document.getElementById('armyModal').style.display = 'flex';
+        }
+
+        function closeMsg() {
+            document.getElementById('armyModal').style.display = 'none';
+        }
+
+        // [요청사항 1 & 2] 총 6개 면담 및 관찰기록 데이터 (면담자: 백희민)
+        const counselingList = [
+            {
+                id: 'rec1',
+                date: '2026-09-01',
+                type: '수시면담',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '장재원',
+                firstTime: '2026-09-01 18:30:00',
+                lastTime: '2026-09-01',
+                action: '',
+                showButtons: false,
+                summary: '1. 분대장 결산간 4생활관 분대장(상병 유승환)으로 부터 백희민 상병이 "죽고싶다. 오늘밤에 사고칠것 같다"라는 이야기...',
+                content: `1. 분대장 결산간 4생활관 분대장(상병 유승환)으로 부터 백희민 상병이 "죽고싶다. 오늘밤에 사고칠것 같다"라는 이야기를 듣고 조/반장에게 보고하여 중대장에게까지 보고됨.
+2. 백희민 상병이 중대장실에 들어올때 굉장히 상기되어있었고 화가 나있었음. 사유를 들어보니 대대일일 결산 자료 종합간 본인이 실수를 해서 운용과장님과 인사과장에게 꾸중을 들음.
+3. 때문에 "운용과도 싫고 중대도 싫고 다 그만두고싶고, 더 이상 본인이 어떻게 해야할지 모르겠다"는 등의 발언을 했으며, 9월중에 휴가를 나가야겠다고 이야기하였음.(기분/감정 전환의 목적으로 보임)
+
+*중대장 조치
+1. 왜 화가났는지 물었을땐 위에서 언급한 운용과에서 꾸중들은 내용을 이야기하였으며 추가로 식별된것은 함께일하는 상황병 한승수 상병과 본인이 차별 대우를 받는것 같다, 그래서 기분이 나쁘다는 이야기를 함.
+2. 더 이상 운용과에서 업무하지말고 중대로 원복하여 업무할것을 권장하였으며, 중대로 원복한다면 본인이 스스로 할 수 있는 역할들을 중대장이 발굴하여 임무를 부여하겠다고 하였음.
+3. 휴가 사용에 대해서는 적극 권장하였고, 대신 본인 보유한 휴가에 한해서 기간에 관계없이 보내주겠다고 이야기하였음.
+4. 목요일에 병영생활전문상담관 면담을 신청하였으며, 상담관 일정 맞춰서 면담 하겠음.
+
+*결론적으로 면담 마지막에는 본인 기분이 다소 풀렸으며, 운용과에서 계속 임무수행 여부와 휴가 스케줄에 대한 내용은 본인이 조금더 고민해보겠다고 했으며, 당장 오늘 자살 할것같냐고 질의하니 그렇진 않다고 답변함.
+중대장 판단으로는 운용과에서 꾸중들은것이 매개가 되어 감정기복이 격하게 나타난것으로 보이며, 본인도 현재 순간적으로 감정이 격해져 나온 반응인지를 조금더 지켜보겠다고 하였음.
+해당 내용은 오늘 근무자에게 공유하고 오늘 하루는 감정상태와 자살징후 등을 세심히 살펴보겠음.`
+            },
+            {
+                id: 'rec2',
+                date: '2026-08-07',
+                type: '수시면담',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '윤지웅',
+                firstTime: '2026-08-07 10:30:00',
+                lastTime: '2026-08-07',
+                action: '',
+                showButtons: false,
+                summary: '관계유형 검사 결과 "평균형" 확인 후 소대원 간 대인관계 소통 면담 실시.',
+                content: `관찰 및 면담 결과 :
+8월 관계유형검사 진행 후 대인관계 및 부대 적응도에 대한 소통 면담을 실시함.
+백희민 상병은 선후임 간 소통에서 일시적인 답답함을 느꼈으나 대화를 통해 상호 간 오해를 풀었다고 함.
+부대 생활 내 정서적 안정감을 유지하고 있으며, 주간 과업 수행 시 적극적인 태도를 보이고 있음.
+간부 차원에서도 정기적인 관심과 경청을 지속할 것임.`
+            },
+            {
+                id: 'rec3',
+                date: '2026-07-22',
+                type: '7월 신상관리위원회 지휘조치',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '지성소',
+                firstTime: '2026-07-22 11:05:00',
+                lastTime: '2026-07-22',
+                action: '',
+                showButtons: true,
+                summary: '■ 대대장 지시사항(지휘 조치) : 1. 신체건강 - 軍 지원정책 - 군 병원 진료 및 재활 여건 보장',
+                content: `■ 대대장 지시사항(지휘 조치)
+1. 신체건강 - 軍 지원정책 - 군 병원 진료
+2. 재활치료 관련하여 중대 간부들이 재활치료의 중요성 설명 및 개인적인 재활활동 강조
+3. 군병원 및 민간병원 진료여건 보장
+
+■ 소대장 의견
+1. 신체건강 - 軍 지원정책 - 군 병원 진료
+대상 장병 백희민의 신체 건강 상태 회복을 최우선에 두고 군 지원정책을 적극 활용하여 조치를 실시하겠음. 장병의 현 건강 상태를 지속적으로 확인하고, 주 1회 대전병원에서 재활치료를 받을 수 있게끔 여건을 보장해주겠음. 또한 장병이 진료를 희망할 시에 민간병원을 통하여 물리치료를 받을 수 있도록 하겠음. 지속적인 확인은 구체적으로 현 인원이 행정병으로 임무수행을 하고 있고 평균 1시간에 1번씩은 흡연을 하러 가는 모습을 관찰하였음. 따라서 같은 간부 연구실에서 근무하고 있는 만큼 불편한 모습이 보이면 즉시 조치할 수 있도록 하겠으며, 흡연장을 오갈 때 상태를 체크하여 인원이 군대에 있어 원활한 재활이 되지 않고 상태가 악화되는 상황이 일어나지 않도록 하겠음.
+
+2. 재활치료 관련하여 중대 간부들이 재활치료의 중요성 설명 및 개인적인 재활활동 강조
+인원과 면담을 통하여 재활치료의 중요성을 설명하고 개인적인 재활활동을 강조하였음. 구체적으로 확인을 해야할 것 같아 다음 면담을 진행할 때 어떤 재활운동을 하고 있는지 물어보고, 어떻게 실시하는지 구체적으로 물어볼 예정임. 이를 파악한 후 현 인원이 제대로 재활치료를 하고 있는지 매일 체크를 할 예정이며, 재활운동을 하지 않고 있을 시 바로 재활운동 시간을 부여하고 옆에서 관찰하여 재활치료가 영내에서 지속될 수 있도록 관리하겠음.
+
+3. 군병원 및 민간병원 진료여건 보장
+가능한 내에서 병원진료여건을 보장하겠음. 주 1회 대전병원에서 재활치료, 진료 희망 시 민간병원 진료를 보장하겠음.`
+            },
+            {
+                id: 'rec4',
+                date: '2026-06-01',
+                type: '진급 면담',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '이정태',
+                firstTime: '2026-06-01 09:15:00',
+                lastTime: '2026-06-01',
+                action: '',
+                showButtons: false,
+                summary: '상병 진급에 따른 리더십 형성 및 병영생활 솔선수범 독려 면담.',
+                content: `상병 진급에 따른 정기 지휘관 면담 진행.
+전송소대 핵심 통신병으로서 백희민 상병이 자신의 역할에 대한 책임감을 다하고 있음을 확인.
+분대원들과의 소통을 원활히 하고 후임 병사들에 대한 친절한 사수 교육을 독려함.
+부대 내 특이사항 없으며, 체력검수 및 분대원 관리에서도 모범을 보이고 있음.`
+            },
+            {
+                id: 'rec5',
+                date: '2026-02-09',
+                type: '수시관찰면담',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '유재준',
+                firstTime: '2026-02-09 14:20:00',
+                lastTime: '2026-02-09',
+                action: '',
+                showButtons: false,
+                summary: '관찰 및 면담 결과 : 수술부위 호전 상태 점검, 1년간 경과관찰 및 외진 경과 확인.',
+                content: `관찰 및 면담 결과
+현재 수술부위 상태는 호전되고 있으며, 저번주까지는 많은 통증이 있었다고 함.
+병원에서 1년간 조심해야 한다고 하며 철심제거 전 또다시 부상 시 다시 수술을 해야할 수도 있다고 발언함.
+1년간 조심해야 한다는 부분에서 걱정이 많이 있다고 함.
+금일 외진 간에는 X-Ray 촬영 확인만 하고 수술 상태는 양호하다고 소견 받았다고 함.
+현재 기분을 물어봤을 때 현재 기분은 잘 모르겠다고 함.
+중대에서 생활 간 조금이라도 불편하거나 특이사항 발생 시 언제든지 보고해달라고 교육함.`
+            },
+            {
+                id: 'rec6',
+                date: '2025-06-05',
+                type: '자대전입 초기면담',
+                file1: '-', file2: '-', file3: '-',
+                category: 'PC',
+                interviewer: '백희민',
+                writer: '이정태',
+                firstTime: '2025-06-05 16:00:00',
+                lastTime: '2025-06-05',
+                action: '',
+                showButtons: false,
+                summary: '신병 자대 전입 초기 기본 면담 진행, 2생활관 배치 및 멘토 간부/병사 지정 안내.',
+                content: `자대 전입에 따른 초기 신병 면담 실시.
+부대 기본 수칙 및 생활관 생활 지도, 멘토(대위 강원진 / 이병 지성소) 지정 완료.
+낯선 환경에 대한 부담감이 다소 있으나 긍정적인 성격으로 조기 적응이 기대됨.
+가무 및 자기소개 시간을 통해 소대원들과 조화롭게 어울릴 수 있도록 독려함.`
+            }
+        ];
+
+        // [요청사항 2] 3개 단위 페이징 설정
+        const itemsPerPage = 3;
+        let currentPage = 1;
+
+        function renderCounselingTable(page) {
+            currentPage = page;
+            const tbody = document.getElementById('counselingTbody');
+            tbody.innerHTML = '';
+
+            const startIdx = (page - 1) * itemsPerPage;
+            const endIdx = Math.min(startIdx + itemsPerPage, counselingList.length);
+
+            for (let i = startIdx; i < endIdx; i++) {
+                const item = counselingList[i];
+                const tr = document.createElement('tr');
+                tr.className = 'clickable-row';
+                tr.onclick = function() { showCounselingDetail(item.id); };
+
+                tr.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td>${item.date}</td>
+                    <td>${item.type}</td>
+                    <td>${item.file1}</td>
+                    <td>${item.file2}</td>
+                    <td>${item.file3}</td>
+                    <td>${item.category}</td>
+                    <td>${item.writer}</td>
+                    <td>${item.firstTime}</td>
+                    <td class="left">${item.summary}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const container = document.getElementById('paginationControls');
+            container.innerHTML = '';
+
+            const totalPages = Math.ceil(counselingList.length / itemsPerPage);
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'pagination-btn';
+            prevBtn.innerHTML = '◀';
+            prevBtn.onclick = () => { if (currentPage > 1) renderCounselingTable(currentPage - 1); };
+            container.appendChild(prevBtn);
+
+            for (let p = 1; p <= totalPages; p++) {
+                const btn = document.createElement('button');
+                btn.className = `pagination-btn ${p === currentPage ? 'active' : ''}`;
+                btn.textContent = `[${p}]`;
+                btn.onclick = () => renderCounselingTable(p);
+                container.appendChild(btn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'pagination-btn';
+            nextBtn.innerHTML = '▶';
+            nextBtn.onclick = () => { if (currentPage < totalPages) renderCounselingTable(currentPage + 1); };
+            container.appendChild(nextBtn);
+        }
+
+        // [요청사항 1] 상세보기 화면 조회 (면담자 백희민 고정)
+        function showCounselingDetail(recId) {
+            const data = counselingList.find(item => item.id === recId) || counselingList[0];
+
+            document.getElementById('dtlInterviewer').textContent = '백희민';
+            document.getElementById('dtlDate').textContent = data.date;
+            document.getElementById('dtlCategory').textContent = data.category;
+            document.getElementById('dtlType').textContent = data.type;
+            document.getElementById('dtlContent').textContent = data.content;
+            document.getElementById('dtlWriter').textContent = data.writer;
+            document.getElementById('dtlFirstTime').textContent = data.firstTime;
+            document.getElementById('dtlLastTime').textContent = data.lastTime;
+            document.getElementById('dtlAction').textContent = data.action;
+            document.getElementById('dtlFile1').textContent = data.file1;
+            document.getElementById('dtlFile2').textContent = data.file2;
+            document.getElementById('dtlFile3').textContent = data.file3;
+
+            if (data.showButtons) {
+                document.getElementById('btnModify').style.display = 'inline-block';
+                document.getElementById('btnDelete').style.display = 'inline-block';
+            } else {
+                document.getElementById('btnModify').style.display = 'none';
+                document.getElementById('btnDelete').style.display = 'none';
+            }
+
+            document.getElementById('counselingListView').style.display = 'none';
+            document.getElementById('counselingDetailView').style.display = 'block';
+
+            document.getElementById('counselingDetailView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function hideCounselingDetail() {
+            document.getElementById('counselingDetailView').style.display = 'none';
+            document.getElementById('counselingListView').style.display = 'block';
+            document.getElementById('counselingListView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.onload = function() {
+            renderCounselingTable(1);
+        };
+
+        // Chart.js 시계열 및 레이더 차트 로드
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['1차 면담 (02.09)', '2차 면담 (07.22)', '3차 면담 (09.01)'],
+                datasets: [
+                    {
+                        label: '정신건강',
+                        data: [20, 42, 78],
+                        borderColor: '#ec4899',
+                        backgroundColor: '#ec4899',
+                        tension: 0.2,
+                        borderWidth: 2
+                    },
+                    {
+                        label: '대인관계',
+                        data: [22, 38, 65],
+                        borderColor: '#f59e0b',
+                        backgroundColor: '#f59e0b',
+                        tension: 0.2,
+                        borderWidth: 2
+                    },
+                    {
+                        label: '자살/자해위험',
+                        data: [10, 15, 85],
+                        borderColor: '#a855f7',
+                        backgroundColor: '#a855f7',
+                        tension: 0.2,
+                        borderWidth: 2
+                    },
+                    {
+                        label: '복무적응',
+                        data: [30, 50, 70],
+                        borderColor: '#10b981',
+                        backgroundColor: '#10b981',
+                        tension: 0.2,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 9 }, boxWidth: 10 }
+                    }
+                },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { font: { size: 9 } } },
+                    x: { ticks: { font: { size: 9 } } }
+                }
+            }
+        });
+
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['정신건강', '대인관계', '자살/자해위험', '복무적응'],
+                datasets: [{
+                    label: '위험 수치',
+                    data: [78, 65, 85, 70],
+                    backgroundColor: 'rgba(16, 185, 129, 0.25)',
+                    borderColor: '#10b981',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
