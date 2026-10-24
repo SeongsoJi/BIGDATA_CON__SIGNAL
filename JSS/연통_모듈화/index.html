@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부대행정업무 - 용사신상관리</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- 상단 헤더 영역 -->
+    <header class="top-system-header">
+        <div class="brand">
+            <span>대한민국 육군 ROK ARMY | 부대행정업무</span>
+        </div>
+        <div class="user-info-bar">
+            <span>2차 인증 유효 시간 <strong id="timer">29:30</strong></span> |
+            <span>홈</span> |
+            <span>군번: 26-10220</span> |
+            <span>관리부대: 제xx통신지원대대</span> |
+            <span>소속: 지휘부</span> |
+            <span>성명: 시그널</span> |
+            <span>도움말</span> |
+            <span>관리부대변경</span>
+        </div>
+    </header>
+
+    <!-- 메인 네비게이션 -->
+    <nav class="main-nav-bar">
+        <div class="nav-title-group">
+            <h1>인사</h1>
+            <ul class="nav-menu-list">
+                <li class="active"><a href="#">인사</a></li>
+                <li><a href="#">정작</a></li>
+                <li><a href="#">부대운영일지</a></li>
+                <li><a href="#">시스템</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- 좌측 사이드바 -->
+        <aside class="sidebar">
+            <div class="sidebar-title">■ 인사관리 Menu</div>
+            <ul class="tree-menu">
+                <li>
+                    <div class="tree-node">▶ 인원현황</div>
+                    <ul class="tree-sub">
+                        <li>- 인원현황</li>
+                        <li>- 유동병력관리</li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="tree-node">▶ 간부관리</div>
+                    <ul class="tree-sub">
+                        <li>- 간부신상관리</li>
+                        <li>- 간부전역자관리</li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="tree-node">▼ 용사관리</div>
+                    <ul class="tree-sub">
+                        <li class="active">- 용사신상관리</li>
+                        <li>- 용사전역자관리</li>
+                        <li>- 도움병사관리</li>
+                        <li>- 용사진급관리</li>
+                        <li>- 징계현황관리</li>
+                        <li>- 상훈관리</li>
+                        <li>- 간부지원자관리</li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <main class="main-content">
+            <div class="breadcrumb">홈 > 인사 > 병사관리 > <strong>용사신상관리</strong></div>
+
+            <div class="section-header">
+                <h2>용사 신상정보</h2>
+                <div class="checkbox-group">
+                    <label class="checkbox-label"><input type="radio" name="service_type" checked> 현역</label>
+                    <label class="checkbox-label"><input type="radio" name="service_type"> 상근</label>
+                    <label class="checkbox-label"><input type="checkbox"> 최전방 수호병</label>
+                    <label class="checkbox-label"><input type="checkbox"> 동반입대</label>
+                    <label class="checkbox-label"><input type="checkbox"> 쌍둥이</label>
+                </div>
+            </div>
+
+            <!-- 용사 인적사항 테이블 -->
+            <table class="army-table">
+                <colgroup>
+                    <col width="110">
+                    <col width="110">
+                    <col width="220">
+                    <col width="110">
+                    <col width="180">
+                    <col width="110">
+                    <col width="180">
+                </colgroup>
+                <tr>
+                    <td rowspan="8" style="padding: 4px;">
+                        <img src="https://placehold.co/95x120/1b5262/ffffff?text=ROK+ARMY" alt="증명사진" style="width: 95px; height: 120px; border: 1px solid #ccc; object-fit: cover;">
+                    </td>
+                    <th>전체소속</th>
+                    <td colspan="5" class="left" style="font-weight: bold;">육군 제2작전사 제12정보통신단 제72통신지원대대 지원3중대 전송1소대 단말3조</td>
+                </tr>
+                <tr>
+                    <th>군번</th>
+                    <td>25-76026709</td>
+                    <th>소속</th>
+                    <td>단말3조</td>
+                    <th>군사특기</th>
+                    <td>(171,102)</td>
+                </tr>
+                <tr>
+                    <th>직책</th>
+                    <td>통신병</td>
+                    <th>계급</th>
+                    <td>병장</td>
+                    <th>성명</th>
+                    <td>백희민</td>
+                </tr>
+                <tr>
+                    <th>입대일</th>
+                    <td>2025-04-28</td>
+                    <th>전입일</th>
+                    <td>2025-06-05</td>
+                    <th>진급일</th>
+                    <td>2026-06-01</td>
+                </tr>
+                <tr>
+                    <th>생년월일</th>
+                    <td>2006-07-28</td>
+                    <th>전역예정일</th>
+                    <td>2026-10-27</td>
+                    <th>진급</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>DNA 시료채취<br>(채취완료부대)</th>
+                    <td>시료채취</td>
+                    <th>신병교육대(입영부대)</th>
+                    <td>육군훈련소 28교육연대 1교육대 1중대 1소대 055번</td>
+                    <th>전수조사<br>(자대 전입시)</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>복무상태</th>
+                    <td>현인원</td>
+                    <th>비고</th>
+                    <td colspan="3" class="left">2생활관 / 멘토: 대위 강원진 / 이병 지성소</td>
+                </tr>
+                <tr>
+                    <th>휴대폰번호</th>
+                    <td>010-6499-5892</td>
+                    <th>간부지원의사</th>
+                    <td colspan="3" class="left">
+                        <label><input type="checkbox"> 3사관학교</label>
+                        <label><input type="checkbox"> 간부사관</label>
+                        <label><input type="checkbox"> 현역부사관</label>
+                        <label><input type="checkbox"> 특정부사관</label>
+                        <label><input type="checkbox"> 임기제부사관</label>
+                        <label><input type="checkbox"> 기타</label>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-group" style="margin-bottom: 10px;">
+                <button class="btn" onclick="showMsg('신상정보 수정 화면으로 이동합니다.')">신상정보수정</button>
+                <button class="btn btn-secondary">목록</button>
+                <button class="btn">도움병사목록</button>
+            </div>
+
+            <div class="tab-container">
+                <div class="tab-group">
+                    <div class="tab-item active">일반정보</div>
+                    <div class="tab-item">신체/건강</div>
+                    <div class="tab-item">전체보기</div>
+                </div>
+                <div class="tab-group">
+                    <button class="btn btn-secondary">전투력수준</button>
+                    <button class="btn btn-secondary">지휘참고</button>
+                    <button class="btn btn-secondary">진급심의표</button>
+                </div>
+            </div>
+
+            <!-- 도움병사 정보 -->
+            <div class="section-header">
+                <h2>도움병사</h2>
+            </div>
+            <table class="army-table">
+                <tr>
+                    <th>관리등급</th>
+                    <td>-</td>
+                    <th>등급제외</th>
+                    <td>-</td>
+                    <th>예전도움병사여부</th>
+                    <td>N</td>
+                    <th>선정사유1</th>
+                    <td>-</td>
+                    <th>선정사유2</th>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <th>등급지정일</th>
+                    <td>2025-06-05</td>
+                    <th>등급해제일</th>
+                    <td>-</td>
+                    <td colspan="2"></td>
+                    <th>첨부파일</th>
+                    <td colspan="3" class="left"><a href="#" style="color:#0284c7; text-decoration: underline;">1750676711311_등급분류표 이병 이학벌.hwp</a></td>
+                </tr>
+                <tr>
+                    <th>세부사항</th>
+                    <td colspan="9" class="left" style="line-height: 1.6; padding: 6px;">
+                        1. 지휘관 면담 : 월 1회 진행 중(25.06.05.) * 최근 상담결과 : 특이사항 없음.<br>
+                        2. 병영생활상담관 상담 : 총 0회 * 최근 상담결과 : 특이사항 없음.<br>
+                        3. 민간기관 연계 : 해당사항 없음.<br>
+                        4. 정신과 진료 : 총 0회(최근 : 00.00.00.) * 최근 군의관(의사) 소견 : 해당사항 없음.<br>
+                        5. 가족통보 / 관리방법 협조 : 미실시(00.00.00.)<br>
+                        6. 보직 및 부대 조정 : 고려하지 않고 있음.<br>
+                        7. 그린캠프 입소 : 고려하지 않고 있음.<br>
+                        8. 병역심사관리대 입소 : 고려하지 않고 있음.
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn">수정</button>
+                <button class="btn btn-secondary">삭제</button>
+            </div>
+
+            <!-- 가족사항 -->
+            <div class="section-header">
+                <h2>가족사항</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>관계</th>
+                        <th>성명</th>
+                        <th>나이</th>
+                        <th>연락처</th>
+                        <th>전시친권자</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>모</td>
+                        <td>김영선</td>
+                        <td>52</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">가족사항 수정</button>
+            </div>
+
+            <!-- 교우관계 -->
+            <div class="section-header">
+                <h2>교우관계 (선택기재사항)</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>성명</th>
+                        <th>출생년도</th>
+                        <th>연락처</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="color: #94a3b8;">등록된 교우관계 정보가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">추가</button>
+                <button class="btn btn-secondary">삭제</button>
+                <button class="btn">저장</button>
+            </div>
+
+            <!-- 최근 가장 관심/걱정 분야 -->
+            <div class="section-header">
+                <h2>최근 가장 관심 / 걱정이 있는 분야 (선택기재사항) <span style="font-size:10px; font-weight:normal; color:#64748b;">25-12029 / 2025-07-21 07:47:43</span></h2>
+            </div>
+            <table class="army-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col width="150">
+                    <col width="200">
+                </colgroup>
+                <tr>
+                    <th>분야</th>
+                    <th>사유</th>
+                    <th>분야</th>
+                    <th>사유</th>
+                </tr>
+                <tr>
+                    <th>군 생활의 적응</th>
+                    <td>없음</td>
+                    <th>건강문제</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>성격적인 문제</th>
+                    <td>없음</td>
+                    <th>가족관계</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>이성과의 문제</th>
+                    <td>없음</td>
+                    <th>대인관계</th>
+                    <td>없음</td>
+                </tr>
+                <tr>
+                    <th>금전적인 문제</th>
+                    <td>없음</td>
+                    <th>기타</th>
+                    <td>없음</td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn">저장</button>
+            </div>
+
+            <!-- 입대 후 복무기록 -->
+            <div class="section-header">
+                <h2>입대 후 복무기록</h2>
+            </div>
+            <table class="army-table" id="serviceRecordTable">
+                <thead>
+                    <tr>
+                        <th width="40">순번</th>
+                        <th width="90">일자</th>
+                        <th>주요복무내용</th>
+                        <th width="80">첨부파일1</th>
+                        <th width="80">첨부파일2</th>
+                        <th width="80">첨부파일3</th>
+                        <th width="70">기록자</th>
+                        <th width="120">기록일자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2026-10-02</td>
+                        <td class="left">10.2 외진(의출) 외부진료 감소 : 손목통증 이비인</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>지성소</td>
+                        <td>2026-10-02 21:09:50</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2026-08-07</td>
+                        <td class="left">26년 3분기 관계유형검사 결과 "평균형"</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>윤지웅</td>
+                        <td>2026-08-07 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2026-07-30</td>
+                        <td class="left">복무적응도 4차 검사 결과 : 양호(26.07.30)</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>이정태</td>
+                        <td>2026-07-30 16:56:20</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+                <button class="btn btn-secondary">부분출력</button>
+                <button class="btn btn-secondary">전체출력</button>
+                <button class="btn">일괄 업로드</button>
+            </div>
+
+            <!-- 복무적응도 -->
+            <div class="section-header">
+                <h2>복무적응도</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>검사일자</th>
+                        <th>검사결과</th>
+                        <th>후속조치 면담</th>
+                        <th>지휘조치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="padding: 12px; color: #64748b;">데이터가 없음</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+            </div>
+
+            <!-- 관계유형검사 -->
+            <div class="section-header">
+                <h2>관계유형검사</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th>검사일자</th>
+                        <th>검사결과</th>
+                        <th>후속조치 면담</th>
+                        <th>지휘조치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" style="padding: 12px; color: #64748b;">데이터가 없음</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">등록</button>
+            </div>
+
+
+            <!-- [요청사항 3] 면담 및 관찰기록 (AI 위험징후 식별 상단으로 이동) -->
+            <div id="counselingListView">
+                <div class="section-header">
+                    <h2>면담 및 관찰기록</h2>
+                    <span style="font-size:10px; color:#ef4444;">* 항목목록의 항목을 클릭하면 상세 관찰기록 화면으로 넘어갑니다.</span>
+                </div>
+                <table class="army-table" id="counselingTable">
+                    <thead>
+                        <tr>
+                            <th width="40">순번</th>
+                            <th width="90">면담일자</th>
+                            <th width="90">면담종류</th>
+                            <th width="60">첨부1</th>
+                            <th width="60">첨부2</th>
+                            <th width="60">첨부3</th>
+                            <th width="50">구분</th>
+                            <th width="60">기록자</th>
+                            <th width="120">기록일시</th>
+                            <th>조치 및 주요 관찰 내용</th>
+                        </tr>
+                    </thead>
+                    <tbody id="counselingTbody">
+                    </tbody>
+                </table>
+
+                <!-- [요청사항 2] 페이징 컨트롤 (3개 단위, [◀] [1] [2] [▶]) -->
+                <div class="pagination" id="paginationControls"></div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="showMsg('면담 및 관찰기록 등록 화면으로 이동합니다.')">등록</button>
+                    <button class="btn btn-secondary">부분출력</button>
+                    <button class="btn btn-secondary">전체출력</button>
+                    <button class="btn">일괄 업로드</button>
+                </div>
+            </div>
+
+            <!-- 면담 및 관찰기록 상세 화면 (요청사항 1: 면담자 '백희민' 고정) -->
+            <div id="counselingDetailView" style="display: none;">
+                <div class="section-header dash-header">
+                    <h2>- 면담 및 관찰기록</h2>
+                    <div class="btn-group">
+                        <button class="btn" onclick="showMsg('등록 화면으로 이동합니다.');">등록</button>
+                    </div>
+                </div>
+                <table class="army-table">
+                    <colgroup>
+                        <col width="100">
+                        <col width="180">
+                        <col width="100">
+                        <col width="180">
+                        <col width="90">
+                        <col width="100">
+                        <col width="90">
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <th>면담자</th>
+                        <td id="dtlInterviewer" style="font-weight:bold;">백희민</td>
+                        <th>면담일자</th>
+                        <td id="dtlDate">2026-09-01</td>
+                        <th>구분</th>
+                        <td colspan="3" class="left" id="dtlCategory">PC</td>
+                    </tr>
+                    <tr>
+                        <th>면담종류</th>
+                        <td colspan="7" class="left" id="dtlType" style="font-weight:bold;">수시면담</td>
+                    </tr>
+                    <tr>
+                        <th style="vertical-align: middle;">내용</th>
+                        <td colspan="7" class="left" id="dtlContent" style="padding: 8px; line-height: 1.6; white-space: pre-line; vertical-align: top; min-height: 180px;"></td>
+                    </tr>
+                    <tr>
+                        <th>기록자</th>
+                        <td id="dtlWriter">장재원</td>
+                        <th>최초기록일시</th>
+                        <td id="dtlFirstTime">2026-09-01</td>
+                        <th>최종수정일시</th>
+                        <td id="dtlLastTime">2026-09-01</td>
+                        <th>조치결과</th>
+                        <td id="dtlAction" class="left"></td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일</th>
+                        <td colspan="7" class="left" id="dtlFile1">-</td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일2</th>
+                        <td colspan="7" class="left" id="dtlFile2">-</td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일3</th>
+                        <td colspan="7" class="left" id="dtlFile3">-</td>
+                    </tr>
+                </table>
+
+                <div class="btn-group" style="margin-top: 6px; margin-bottom: 10px;">
+                    <button class="btn" id="btnModify" style="display:none;" onclick="showMsg('수정 화면으로 이동합니다.');">수정</button>
+                    <button class="btn btn-secondary" id="btnDelete" style="display:none;" onclick="showMsg('삭제 처리 기능입니다.');">삭제</button>
+                    <button class="btn" onclick="hideCounselingDetail()">목록</button>
+                </div>
+            </div>
+
+
+            <!-- [요청사항 3] AI 기반 위험징후 식별 및 후속관리 (면담기록 하단으로 이동) -->
+            <div class="section-header" style="margin-top: 20px;">
+                <h2>AI 기반 위험징후 식별 및 후속관리 <span style="font-size:10px; font-weight:normal; color:#0284c7; margin-left:6px;">[신인성검사 및 면담록 실시간 AI 연계]</span></h2>
+            </div>
+
+            <div class="ai-analysis-container">
+                <div class="ai-grid-layout">
+                    <div class="ai-card">
+                        <div class="ai-card-title">
+                            <span>시점별/회차별 위험도 변화 추이 (시계열)</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="ai-card">
+                        <div class="ai-card-title">
+                            <span>최근 영역별 위험 균형 (Radar)</span>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card-title" style="margin-bottom:6px;">
+                    <span style="font-size:11px;" id="reportTitle">최근 분석 리포트 : 백희민 상병 수시면담 자연어 분석 결과 (2026.09.01)</span>
+                    <span style="font-size:10px; color:#64748b;" id="reportTime">분석 완료 시각: 2026-09-01 19:30:00</span>
+                </div>
+
+                <div class="report-grid">
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>🔍 식별된 위험징후 및 판단 근거</span>
+                        </div>
+                        <div class="risk-item high">
+                            <div>
+                                <strong>자살/자해 위험</strong><br>
+                                <span style="color:#64748b; font-size:10px;">"죽고싶다. 오늘밤에 사고칠것 같다" 발언 식별</span>
+                            </div>
+                            <span class="badge badge-danger">위험도: 상</span>
+                        </div>
+                        <div class="risk-item high">
+                            <div>
+                                <strong>정신건강 및 감정기복</strong><br>
+                                <span style="color:#64748b; font-size:10px;">꾸중 후 상기됨, 감정기복 격하게 나타남</span>
+                            </div>
+                            <span class="badge badge-danger">위험도: 상</span>
+                        </div>
+                        <div class="risk-item medium">
+                            <div>
+                                <strong>대인관계 및 소원감</strong><br>
+                                <span style="color:#64748b; font-size:10px;">상황병 대비 차별대우 느꼈다는 호소</span>
+                            </div>
+                            <span class="badge badge-warning">위험도: 중</span>
+                        </div>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>💡 지휘관 맞춤형 후속 질문 가이드</span>
+                        </div>
+                        <ol class="guide-list">
+                            <li><strong>1.</strong> "'다 끝내버리고 싶다'는 생각이 들 때 구체적으로 어떤 도움이 절실한가요?"</li>
+                            <li><strong>2.</strong> "운용과와 중대 업무 환경에서 어떤 점이 백희민 상병을 가장 힘들게 했나요?"</li>
+                            <li><strong>3.</strong> "휴가를 다녀온 후 부대 생활에 대해 어떤 방향을 구상 중인가요?"</li>
+                        </ol>
+                    </div>
+
+                    <div class="report-box">
+                        <div class="report-box-header">
+                            <span>📌 권장 후속 관리 조치 (ACTION ITEMS)</span>
+                        </div>
+                        <ul class="action-list">
+                            <li>오늘 근무자에게 백희민 상병 감정상태 및 자살징후 세심 관찰 공유</li>
+                            <li>목요일 병영생활전문상담관 면담 연계 및 진행</li>
+                            <li>중대 원복 고려 및 맞춤형 역할/임무 발굴 부여</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 병영생활 평가 -->
+            <div class="section-header" style="margin-top:20px;">
+                <h2>병영생활 평가</h2>
+            </div>
+            <table class="army-table">
+                <thead>
+                    <tr>
+                        <th width="40">순번</th>
+                        <th width="100">평가일자</th>
+                        <th>1차평가자</th>
+                        <th>2차평가자</th>
+                        <th width="150">최종기록일시</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2026-10-07</td>
+                        <td>안동국</td>
+                        <td>지성소</td>
+                        <td>2026-10-07 16:39:13</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2026-02-10</td>
+                        <td>안동국</td>
+                        <td>유재준</td>
+                        <td>2026-02-10 14:44:31</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button class="btn">1차평가</button>
+            </div>
+
+            <!-- 간부지원 의사 -->
+            <div class="section-header" style="margin-top:20px;">
+                <h2>간부지원 의사</h2>
+            </div>
+            <table class="army-table">
+                <colgroup>
+                    <col width="120">
+                    <col>
+                    <col width="100">
+                    <col width="120">
+                </colgroup>
+                <tr>
+                    <th>분류</th>
+                    <td class="left">
+                        <label><input type="checkbox"> 3사관학교</label>
+                        <label><input type="checkbox"> 간부사관</label>
+                        <label><input type="checkbox"> 현역부사관</label>
+                        <label><input type="checkbox"> 특정부사관</label>
+                        <label><input type="checkbox"> 임기제부사관</label>
+                    </td>
+                    <th>관심도</th>
+                    <td>
+                        <select class="ai-select" style="width: 80px;">
+                            <option>미선택</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>신원조회여부</th>
+                    <td colspan="3" class="left">
+                        <select class="ai-select" style="width: 100px;">
+                            <option>미실시</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>면담자 의견</th>
+                    <td colspan="3" style="padding: 6px;">
+                        <textarea class="ai-textarea" style="height: 60px;" placeholder="간부지원 관련 면담자 종합 의견을 기재하세요."></textarea>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-group">
+                <button class="btn btn-secondary">삭제</button>
+                <button class="btn">저장</button>
+            </div>
+
+            <footer class="footer-banner">
+                <div style="font-weight:bold; color:#d9534f; font-size:12px;">국가방위의중심군 육군</div>
+                <div>부당한 방법으로 전산망에 접속하거나 정보를 삭제/변경/유출하는 자는 관계 법령에 따라 처벌을 받게 됩니다.<br>Copyright©2013 육군본부 All Rights Reserved</div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- 커스텀 알림 모달 -->
+    <div id="armyModal" class="army-modal-overlay" style="display: none;">
+        <div class="army-modal-box">
+            <div class="army-modal-header">부대행정업무 시스템 알림</div>
+            <div class="army-modal-body" id="armyModalMsg">처리되었습니다.</div>
+            <div class="army-modal-footer">
+                <button class="btn" onclick="closeMsg()">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/counseling-data.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/counseling.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>
