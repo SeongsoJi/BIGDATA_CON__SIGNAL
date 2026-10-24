@@ -534,3 +534,97 @@
             border-top: 1px solid var(--main-border-color);
             text-align: center;
         }
+/* ==========================================================================
+   시계열 위험 탐지 매트릭스 스타일
+   ========================================================================== */
+.matrix-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    padding: 2px 4px;
+    box-sizing: border-box;
+}
+
+/* 범례 (상단 좌측) */
+.matrix-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #475569;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.matrix-legend .legend-sep {
+    color: #94a3b8;
+}
+
+/* 매트릭스 테이블 */
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.matrix-table th, 
+.matrix-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 3px 0;
+    border: none;
+}
+
+.matrix-table th {
+    font-size: 11px;
+    font-weight: bold;
+    color: #1e293b;
+    padding-bottom: 6px;
+}
+
+.matrix-table .col-category {
+    width: 130px;
+}
+
+.matrix-table .row-label {
+    text-align: right;
+    padding-right: 14px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #1e293b;
+    border-right: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+/* 매트릭스 도트 공통 */
+.matrix-dot {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+/* 탐지 도트 (탐지 시 채워지는 단일 색상) */
+.dot-detected {
+    background-color: #d97706; /* 주황색으로 통일 (원하시는 색상 코드로 자유롭게 변경 가능) */
+    border: 1.5px solid #d97706;
+}
+
+/* 미탐지 도트 (빈 원) */
+.dot-undetected {
+    border: 1.5px solid #cbd5e1;
+    background-color: transparent;
+}
+
+
+
+/* 하단 안내 텍스트 */
+.matrix-caption {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 4px;
+    text-align: left;
+}

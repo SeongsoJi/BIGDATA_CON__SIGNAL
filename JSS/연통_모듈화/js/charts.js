@@ -1,88 +1,97 @@
-// Chart.js 시계열 및 레이더 차트 모듈
-        // Chart.js 시계열 및 레이더 차트 로드
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        const lineChart = new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['1차 면담 (02.09)', '2차 면담 (07.22)', '3차 면담 (09.01)'],
-                datasets: [
-                    {
-                        label: '정신건강',
-                        data: [20, 42, 78],
-                        borderColor: '#ec4899',
-                        backgroundColor: '#ec4899',
-                        tension: 0.2,
-                        borderWidth: 2
-                    },
-                    {
-                        label: '대인관계',
-                        data: [22, 38, 65],
-                        borderColor: '#f59e0b',
-                        backgroundColor: '#f59e0b',
-                        tension: 0.2,
-                        borderWidth: 2
-                    },
-                    {
-                        label: '자살/자해위험',
-                        data: [10, 15, 85],
-                        borderColor: '#a855f7',
-                        backgroundColor: '#a855f7',
-                        tension: 0.2,
-                        borderWidth: 2
-                    },
-                    {
-                        label: '복무적응',
-                        data: [30, 50, 70],
-                        borderColor: '#10b981',
-                        backgroundColor: '#10b981',
-                        tension: 0.2,
-                        borderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { font: { size: 9 }, boxWidth: 10 }
-                    }
-                },
-                scales: {
-                    y: { min: 0, max: 100, ticks: { font: { size: 9 } } },
-                    x: { ticks: { font: { size: 9 } } }
-                }
-            }
-        });
+// Chart.js 시계열 매트릭스 및 레이더 차트 모듈
 
-        const ctxRadar = document.getElementById('radarChart').getContext('2d');
-        const radarChart = new Chart(ctxRadar, {
-            type: 'radar',
-            data: {
-                labels: ['정신건강', '대인관계', '자살/자해위험', '복무적응'],
-                datasets: [{
-                    label: '위험 수치',
-                    data: [78, 65, 85, 70],
-                    backgroundColor: 'rgba(16, 185, 129, 0.25)',
-                    borderColor: '#10b981',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#10b981'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    r: {
-                        angleLines: { color: '#e2e8f0' },
-                        grid: { color: '#e2e8f0' },
-                        suggestedMin: 0,
-                        suggestedMax: 100,
-                        ticks: { display: false }
-                    }
-                }
+// 1. 시계열 위험 탐지 매트릭스 렌더링
+(function renderTimeSeriesMatrix() {
+    const container = document.getElementById('lineChart');
+    if (!container) return;
+
+    // 회차/월별 라벨
+    const timelineLabels = ['1월', '2월', '3월', '4월', '5월', '6월'];
+
+    // 영역별 탐지 데이터 (true: 탐지/채워진 원, false: 미탐지/빈 원)
+    const matrixData = [
+        {
+            category: '정신건강·정서',
+            status: [false, true, true, true, true, true]
+        },
+        {
+            category: '자살위험·자살생각',
+            status: [false, false, false, false, false, true]
+        },
+        {
+            category: '추가확인·불면',
+            status: [false, false, true, true, true, true]
+        },
+        {
+            category: '추가확인·이성문제',
+            status: [false, false, false, false, true, true]
+        }
+    ];
+
+    // HTML 구조 생성
+    let html = `
+        <div class="matrix-container">
+            <div class="matrix-legend">
+                <span class="legend-item"><span class="matrix-dot dot-detected"></span> 탐지</span>
+                <span class="legend-sep">·</span>
+                <span class="legend-item"><span class="matrix-dot dot-undetected"></span> 미탐지</span>
+            </div>
+            
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th class="col-category"></th>
+                        ${timelineLabels.map(label => `<th>${label}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${matrixData.map(row => `
+                        <tr>
+                            <td class="row-label">${row.category}</td>
+                            ${row.status.map(isDetected => `
+                                <td>
+                                    <span class="matrix-dot ${isDetected ? 'dot-detected' : 'dot-undetected'}"></span>
+                                </td>
+                            `).join('')}
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            
+            <div class="matrix-caption">4개 영역에서 시점이 다른 탐지가 누적된다</div>
+        </div>
+    `;
+
+    container.innerHTML = html;
+})();
+
+// 2. Radar 차트
+const ctxRadar = document.getElementById('radarChart').getContext('2d');
+const radarChart = new Chart(ctxRadar, {
+    type: 'radar',
+    data: {
+        labels: ['정신건강', '대인관계', '자살/자해위험', '복무적응'],
+        datasets: [{
+            label: '위험 수치',
+            data: [78, 65, 85, 70],
+            backgroundColor: 'rgba(16, 185, 129, 0.25)',
+            borderColor: '#10b981',
+            borderWidth: 2,
+            pointBackgroundColor: '#10b981'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            r: {
+                angleLines: { color: '#e2e8f0' },
+                grid: { color: '#e2e8f0' },
+                suggestedMin: 0,
+                suggestedMax: 100,
+                ticks: { display: false }
             }
-        });
-    
+        }
+    }
+});
